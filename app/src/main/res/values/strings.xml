@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Remote Health Monitoring</string>
+    <string name="login_btn">Login</string>
+    <string name="google_auth_content">Login with Google</string>
+    <string name="facebook_auth_content">Login with Facebook</string>
+    <string name="apple_auth_content">Login with Apple</string>
+    <string name="username_lbl">Username:</string>
+    <string name="password_lbl">Password:</string>
+    <string name="sign_up_question_lbl">Don\'t have an account?</string>
+    <string name="sign_up_link_lbl">Sign up!</string>
+    <string name="forgotPass">Forgot Password?</string>
+    <string name="newPasswordInstructions">Enter New Password</string>
+    <string name="otpInstructions">Enter OTP Code</string>
+    <string name="getOTP">Get OTP</string>
+    <string name="resetPass">Reset Password</string>
+    <string name="resetInstructions">A Reset Code Has Been Sent</string>
+    <string name="register_btn">Register</string>
+    <string name="confirm_password_lbl">Confirm Password:</string>
+    <string name="email_lbl">Email:</string>
+    <string name="phone_lbl">Phone Number:</string>
+    <string name="name_lbl">Full Name:</string>
+    <string name="birthday_lbl">Birthday:</string>
+    <string name="acc_verification">Account Confirmation</string>
+    <string name="acc_verification_code">Account Confirmation Code</string>
+    <string name="acc_verification_btn">Confirm Account</string>
+</resources>
