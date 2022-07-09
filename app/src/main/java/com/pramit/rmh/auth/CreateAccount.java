@@ -1004,7 +1004,7 @@ public class CreateAccount extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_acc);
-        this.aws = new AWSConnection(getApplicationContext());
+        this.aws = new AWSConnection(this);
         initListeners();
     }
 
@@ -1071,6 +1071,7 @@ public class CreateAccount extends AppCompatActivity {
         return map;
     }
 
+    //TODO: ADD UI ERROR NOTIFICATIONS
     public boolean validateFields() {
         String phoneCode = Objects.requireNonNull(((TextInputLayout) findViewById(R.id.phoneContainer)).getPrefixText()).toString();
         String phoneNum = ((EditText) (findViewById(R.id.phone))).getText().toString();
@@ -1081,13 +1082,13 @@ public class CreateAccount extends AppCompatActivity {
         if (!validateEmail(email))
             return false;
         String birthday = ((EditText) (findViewById(R.id.birthday))).getText().toString();
-        if (!validateAge(birthday)) //TODO: AGE VALIDATION
+        if (!validateAge(birthday))
             return false;
         String userId = ((EditText) (findViewById(R.id.username))).getText().toString();
         if (userId.equals(""))
             return false;
         String password = ((EditText) (findViewById(R.id.password))).getText().toString();
-        if (!validatePassword(password)) //TODO: PASSWORD VALIDATION
+        if (!validatePassword(password))
             return false;
         String passwordConfirmation = ((EditText) (findViewById(R.id.confirmPassword))).getText().toString();
         return passwordConfirmation.equals(password);

@@ -1,6 +1,5 @@
 package com.pramit.rmh.auth;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,14 +12,12 @@ import com.pramit.rmh.R;
 public class Login extends AppCompatActivity {
 
     private AWSConnection aws;
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        this.context = getApplicationContext();
-        this.aws = new AWSConnection(context);
+        this.aws = new AWSConnection(this);
         initListeners();
         initSettings();
     }
@@ -50,7 +47,7 @@ public class Login extends AppCompatActivity {
     public void initListeners() {
         EditText userIdField = findViewById(R.id.username);
         findViewById(R.id.signUpLink).setOnClickListener(e -> {
-            Intent newAccount = new Intent(context, CreateAccount.class);
+            Intent newAccount = new Intent(this, CreateAccount.class);
             startActivity(newAccount);
         });
         findViewById(R.id.login).setOnClickListener(e -> {
