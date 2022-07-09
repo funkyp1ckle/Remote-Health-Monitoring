@@ -6,12 +6,9 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointBackward;
@@ -1054,7 +1051,7 @@ public class CreateAccount extends AppCompatActivity {
                 String userId = registrationData.get("preferred_username");
                 String password = registrationData.remove("password");
                 aws.signUp(userId, password, registrationData);
-                confirmAccount(userId);
+                new OTPInput(userId, aws).show(getSupportFragmentManager(), OTPInput.FRAGMENT_TAG);
             }
         });
     }
@@ -1094,24 +1091,5 @@ public class CreateAccount extends AppCompatActivity {
             return false;
         String passwordConfirmation = ((EditText) (findViewById(R.id.confirmPassword))).getText().toString();
         return passwordConfirmation.equals(password);
-    }
-
-    public void confirmAccount(String userId) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle(R.string.acc_verification);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.fragment_confirm_acc, null);
-        LinearLayout layout = dialogView.findViewById(R.id.confirm_acc_layout);
-        dialogBuilder.setView(dialogView);
-
-        dialogBuilder.setPositiveButton(R.string.acc_verification_btn, null);
-        AlertDialog dialog = dialogBuilder.create();
-
-        dialog.setOnShowListener(dialogInterface -> dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener(click -> {
-            String code = ((EditText) findViewById(R.id.otp)).getText().toString();
-            aws.confirmUser(userId, code);
-            dialog.dismiss(); //TODO: FIX SO DOESNT CLOSE IF INCORRECT
-        }));
-        dialog.show();
     }
 }
