@@ -2,6 +2,7 @@ package com.pramit.rmh.auth;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.InputType;
@@ -1004,7 +1005,10 @@ public class CreateAccount extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_acc);
-        this.aws = new AWSConnection(this);
+        if (Build.VERSION.SDK_INT >= 33)
+            this.aws = getIntent().getSerializableExtra("AWS", AWSConnection.class);
+        else
+            this.aws = (AWSConnection) getIntent().getSerializableExtra("AWS");
         initListeners();
     }
 

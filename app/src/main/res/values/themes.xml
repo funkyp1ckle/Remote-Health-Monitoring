@@ -10,7 +10,7 @@
     </style>
 
     <style name="CustomCardView" parent="@style/CardView">
-        <item name="cardBackgroundColor">@color/background</item>
+        <item name="cardBackgroundColor">@color/cardBackground</item>
         <item name="cardCornerRadius">10dp</item>
         <item name="cardElevation">0dp</item>
     </style>

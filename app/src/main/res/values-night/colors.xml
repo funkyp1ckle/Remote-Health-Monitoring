@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#CC1E1E1E</color>
-    <color name="backgroundOpaque">#1E1E1E</color>
+    <color name="background">#141414</color>
+    <color name="cardBackground">#CC1E1E1E</color>
+    <color name="cardBackgroundOpaque">#1E1E1E</color>
     <color name="editTextBackground">#3C3C3C</color>
     <color name="normalText">#DCDCDC</color>
     <color name="loginBtnBackground">#BA86FC</color>

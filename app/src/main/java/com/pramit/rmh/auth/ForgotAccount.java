@@ -25,17 +25,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ForgotAccount extends DialogFragment {
     public static final String FRAGMENT_TAG = "forgot_account_dialog";
     private String userId;
-    private AWSConnection aws;
+    private final AWSConnection aws;
 
-    public ForgotAccount(String userId) {
+    public ForgotAccount(String userId, AWSConnection aws) {
         this.userId = userId;
+        this.aws = aws;
     }
 
     @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstaceState) {
-        if (aws == null)
-            aws = new AWSConnection(getContext());
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.DialogFragment);
         dialogBuilder.setTitle(R.string.forgotPass);
         LayoutInflater inflater = this.getLayoutInflater();

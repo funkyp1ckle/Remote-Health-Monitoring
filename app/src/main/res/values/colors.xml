@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="statusBarColor">#191919</color>
-    <color name="background">#CCC8C8C8</color>
-    <color name="backgroundOpaque">#C8C8C8</color>
+    <color name="background">#DCDCDC</color>
+    <color name="cardBackground">#CCC8C8C8</color>
+    <color name="cardBackgroundOpaque">#C8C8C8</color>
     <color name="editTextBackground">#DCDCDC</color>
     <color name="normalText">#1E1E1E</color>
     <color name="linkText">#8AB4F8</color>

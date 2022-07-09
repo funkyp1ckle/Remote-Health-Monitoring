@@ -23,4 +23,5 @@
     <string name="acc_verification">Account Confirmation</string>
     <string name="acc_verification_code">Account Confirmation Code</string>
     <string name="acc_verification_btn">Confirm Account</string>
+    <string name="home_scroll_description">Root Scroll View</string>
 </resources>

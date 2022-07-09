@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.pramit.rmh.AWSConnection;
 import com.pramit.rmh.R;
 
+//TODO: ADD TO ANDROID ACCOUNTS
 public class Login extends AppCompatActivity {
 
     private AWSConnection aws;
@@ -48,6 +49,7 @@ public class Login extends AppCompatActivity {
         EditText userIdField = findViewById(R.id.username);
         findViewById(R.id.signUpLink).setOnClickListener(e -> {
             Intent newAccount = new Intent(this, CreateAccount.class);
+            newAccount.putExtra("AWS", aws);
             startActivity(newAccount);
         });
         findViewById(R.id.login).setOnClickListener(e -> {
@@ -66,7 +68,7 @@ public class Login extends AppCompatActivity {
         });
         findViewById(R.id.forgotPass).setOnClickListener(e -> {
             String userId = userIdField.getText().toString();
-            ForgotAccount forgotAccountDialog = new ForgotAccount(userId);
+            ForgotAccount forgotAccountDialog = new ForgotAccount(userId, aws);
             forgotAccountDialog.show(getSupportFragmentManager(), ForgotAccount.FRAGMENT_TAG);
         });
 

@@ -12,9 +12,10 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.*;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cognitoidentityprovider.model.SignUpResult;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class AWSConnection {
+public class AWSConnection implements Serializable {
     private static final Regions REGION = Regions.US_EAST_1;
     private static final String USER_POOL_ID = "us-east-1_XD7LWYRpW";
     private static final String CLIENT_ID = "7sb607motb1es94lv4kovf12v6";
@@ -25,13 +26,16 @@ public class AWSConnection {
     private final Context context;
     private final CognitoUserPool userPool;
 
+    private final AWSConnection aws;
+
     public AWSConnection(Context context) {
         this.context = context;
         CognitoCachingCredentialsProvider provider = new CognitoCachingCredentialsProvider(
                 context,
                 USER_POOL_ID,
                 REGION);
-        userPool = new CognitoUserPool(context, USER_POOL_ID, CLIENT_ID, null, REGION);
+        this.userPool = new CognitoUserPool(context, USER_POOL_ID, CLIENT_ID, null, REGION);
+        this.aws = this;
     }
 
     public void userLogin(String userId, String userPassword) {
@@ -59,6 +63,7 @@ public class AWSConnection {
                     editor.apply();
 
                     Intent home = new Intent(context, Home.class);
+                    home.putExtra("AWS", aws);
                     home.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(home);
                 }
