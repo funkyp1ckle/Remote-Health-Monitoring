@@ -24,8 +24,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ForgotAccount extends DialogFragment {
     public static final String FRAGMENT_TAG = "forgot_account_dialog";
-    private String userId;
     private final AWSConnection aws;
+    private String userId;
 
     public ForgotAccount(String userId, AWSConnection aws) {
         this.userId = userId;
@@ -63,7 +63,7 @@ public class ForgotAccount extends DialogFragment {
                 userId = usernameEditText.getText().toString();
                 int curCounterVal = clickCounter.get();
                 if (curCounterVal == 0 && !userId.equals("")) {
-                    aws.forgotPassword(userId);
+                    aws.forgotPassword(context, userId);
                     layout.addView(newPasswordBox);
                     layout.addView(otpBox);
                     button.setText(R.string.resetPass);
@@ -71,7 +71,7 @@ public class ForgotAccount extends DialogFragment {
                 } else if (curCounterVal == 1 && !(newPasswordBox.getEditText().getText().toString().equals("") || (otpBox.getEditText().getText().toString().equals("")))) {
                     String password = newPasswordBox.getEditText().getText().toString();
                     String otpCode = otpBox.getEditText().getText().toString();
-                    aws.confirmForgotPassword(userId, password, otpCode);
+                    aws.confirmForgotPassword(context, userId, password, otpCode);
                     dialog.dismiss();
                 } else {
                     Toast.makeText(context, "Fill in all fields", Toast.LENGTH_LONG).show();

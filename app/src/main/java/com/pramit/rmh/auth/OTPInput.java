@@ -37,7 +37,7 @@ public class OTPInput extends DialogFragment {
 
         dialog.setOnShowListener(dialogInterface -> dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener(click -> {
             String code = ((EditText) dialogView.findViewById(R.id.otp)).getText().toString();
-            aws.confirmUser(userId, code);
+            aws.confirmUser(getContext(), userId, code);
             dialog.dismiss(); //TODO: FIX SO DOESNT CLOSE IF INCORRECT
         }));
         return dialog;

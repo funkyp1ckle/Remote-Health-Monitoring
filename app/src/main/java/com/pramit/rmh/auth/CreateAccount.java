@@ -1006,9 +1006,9 @@ public class CreateAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_acc);
         if (Build.VERSION.SDK_INT >= 33)
-            this.aws = getIntent().getSerializableExtra("AWS", AWSConnection.class);
+            this.aws = getIntent().getParcelableExtra("AWS", AWSConnection.class);
         else
-            this.aws = (AWSConnection) getIntent().getSerializableExtra("AWS");
+            this.aws = getIntent().getParcelableExtra("AWS");
         initListeners();
     }
 
@@ -1054,7 +1054,7 @@ public class CreateAccount extends AppCompatActivity {
                 Map<String, String> registrationData = getRegistrationData();
                 String userId = registrationData.get("preferred_username");
                 String password = registrationData.remove("password");
-                aws.signUp(userId, password, registrationData);
+                aws.signUp(this, userId, password, registrationData);
                 new OTPInput(userId, aws).show(getSupportFragmentManager(), OTPInput.FRAGMENT_TAG);
             }
         });

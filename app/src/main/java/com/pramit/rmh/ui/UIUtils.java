@@ -1,6 +1,7 @@
 package com.pramit.rmh.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -44,5 +45,11 @@ public class UIUtils {
         builder.setTitleText(context.getResources().getText(titleId));
         builder.setSelection(todayInUtcMilliseconds());
         return builder;
+    }
+
+    public static void changeActivity(Context context, Class<?> cls) {
+        Intent newActivity = new Intent(context, cls);
+        newActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(newActivity);
     }
 }

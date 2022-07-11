@@ -7,9 +7,10 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import com.pramit.rmh.AWSConnection;
+import com.pramit.rmh.Home;
 import com.pramit.rmh.R;
+import com.pramit.rmh.ui.UIUtils;
 
-//TODO: ADD TO ANDROID ACCOUNTS
 public class Login extends AppCompatActivity {
 
     private AWSConnection aws;
@@ -17,10 +18,12 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        this.aws = new AWSConnection(this);
-        initListeners();
         initSettings();
+        this.aws = AWSConnection.getInstance(getApplicationContext());
+        if (aws.getCachedIdentityId() != null)
+            UIUtils.changeActivity(this, Home.class);
+        setContentView(R.layout.activity_login);
+        initListeners();
     }
 
     public void initSettings() {
@@ -49,13 +52,12 @@ public class Login extends AppCompatActivity {
         EditText userIdField = findViewById(R.id.username);
         findViewById(R.id.signUpLink).setOnClickListener(e -> {
             Intent newAccount = new Intent(this, CreateAccount.class);
-            newAccount.putExtra("AWS", aws);
             startActivity(newAccount);
         });
         findViewById(R.id.login).setOnClickListener(e -> {
             String username = userIdField.getText().toString();
             String password = ((EditText) findViewById(R.id.password)).getText().toString();
-            aws.userLogin(username, password);
+            aws.userLogin(this, username, password);
         });
         findViewById(R.id.googleAuth).setOnClickListener(e -> {
             //TODO: GOOGLE OAUTH
