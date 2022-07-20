@@ -5,47 +5,25 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import com.pramit.rmh.AWSConnection;
 import com.pramit.rmh.Home;
 import com.pramit.rmh.R;
-import com.pramit.rmh.ui.UIUtils;
 
 public class Login extends AppCompatActivity {
-
     private AWSConnection aws;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initSettings();
         this.aws = AWSConnection.getInstance(getApplicationContext());
-        if (aws.getCachedIdentityId() != null)
-            UIUtils.changeActivity(this, Home.class);
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
+        if (aws.updateCredentials()) {
+            Intent newActivity = new Intent(this, Home.class);
+            newActivity.putExtra("user_id", sharedPreferences.getString("user_id", ""));
+            startActivity(newActivity);
+        }
         setContentView(R.layout.activity_login);
         initListeners();
-    }
-
-    public void initSettings() {
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String darkMode = sharedPreferences.getString("darkMode", "");
-        switch (darkMode) {
-            case "dark":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-            case "light":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
-            case "battery":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-                break;
-            default:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                editor.putString("darkMode", "system");
-                editor.apply();
-                break;
-        }
     }
 
     public void initListeners() {

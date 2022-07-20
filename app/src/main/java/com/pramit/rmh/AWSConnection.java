@@ -1,19 +1,19 @@
 package com.pramit.rmh;
 
-
 import android.content.Context;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.handlers.AsyncHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
-import com.amazonaws.services.dynamodbv2.model.GetItemResult;
+import com.amazonaws.services.dynamodbv2.model.*;
+import com.amazonaws.util.VersionInfoUtils;
 import com.pramit.rmh.auth.*;
 
 import java.util.Map;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class AWSConnection {
@@ -25,15 +25,17 @@ public class AWSConnection {
     private static AWSConnection aws;
     private final CognitoCachingCredentialsProvider credentialsProvider;
     private final CognitoUserPool userPool;
-    private final AmazonDynamoDBAsyncClient dynamoDB;
+    private final AmazonDynamoDBAsync dynamoDB;
+    private final DynamoDBMapper dynamoDBMapper;
 
     private AWSConnection(Context context) {
-        this.credentialsProvider = new CognitoCachingCredentialsProvider(
+        credentialsProvider = new CognitoCachingCredentialsProvider(
                 context,
                 IDENTITY_POOL_ID,
                 REGION);
-        this.userPool = new CognitoUserPool(context, USER_POOL_ID, CLIENT_ID, null, REGION);
-        this.dynamoDB = new AmazonDynamoDBAsyncClient(credentialsProvider, Executors.newFixedThreadPool(10 * Runtime.getRuntime().availableProcessors()));
+        userPool = new CognitoUserPool(context, USER_POOL_ID, CLIENT_ID, null, REGION);
+        dynamoDB = new AmazonDynamoDBAsyncClient(credentialsProvider);
+        dynamoDBMapper = DynamoDBMapper.builder().dynamoDBClient(dynamoDB).build();
     }
 
     public static synchronized AWSConnection getInstance(Context context) {
@@ -42,13 +44,44 @@ public class AWSConnection {
         return aws;
     }
 
-    public Future<GetItemResult> getItems(Map<String, AttributeValue> requestItems) {
-        return dynamoDB.getItemAsync(new GetItemRequest(DB_TABLE_NAME, requestItems));
+    public <T> T dynamoMapToPOJO(Class<T> cls, Map<String, AttributeValue> attr) {
+        return dynamoDBMapper.marshallIntoObject(cls, attr);
+    }
+
+    //TODO: IMPROVE
+    public boolean updateCredentials() {
+        if (credentialsProvider.getCachedIdentityId() != null) {
+            Thread updateCredsTask = new Thread(credentialsProvider::getCredentials);
+            updateCredsTask.start();
+            try {
+                updateCredsTask.join();
+                return true;
+            } catch (InterruptedException interrupt) {
+                interrupt.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public Future<GetItemResult> getItem(GetItemRequest getItemRequest, AsyncHandler<GetItemRequest, GetItemResult> asyncHandler) {
+        getItemRequest.getRequestClientOptions().appendUserAgent("DynamoDBv2Document/" + VersionInfoUtils.getVersion());
+        if (asyncHandler != null)
+            return dynamoDB.getItemAsync(getItemRequest, asyncHandler);
+        else
+            return dynamoDB.getItemAsync(getItemRequest);
+    }
+
+    public Future<PutItemResult> putItem(PutItemRequest putItemRequest, AsyncHandler<PutItemRequest, PutItemResult> asyncHandler) {
+        putItemRequest.getRequestClientOptions().appendUserAgent("DynamoDBv2Document/" + VersionInfoUtils.getVersion());
+        if (asyncHandler != null)
+            return dynamoDB.putItemAsync(putItemRequest, asyncHandler);
+        else
+            return dynamoDB.putItemAsync(putItemRequest);
     }
 
     public void userLogin(Context context, String userId, String userPassword) {
         if (userId != null && userPassword != null)
-            userPool.getUser(userId).getSessionInBackground(new LoginHandler(context, userPassword, credentialsProvider, userPool));
+            userPool.getUser(userId).getSessionInBackground(new LoginHandler(context, userPassword, userPool.getUserPoolId(), credentialsProvider));
     }
 
     public void signUp(Context context, String userId, String password, Map<String, String> metadata) {
@@ -83,7 +116,7 @@ public class AWSConnection {
             userPool.getUser(userId).confirmPasswordInBackground(otp, newPassword, new PasswordResetConfirmationHandler(context, newPassword, otp));
     }
 
-    public String getCachedIdentityId() {
+    public String getCognitoIdentityId() {
         return credentialsProvider.getCachedIdentityId();
     }
 }

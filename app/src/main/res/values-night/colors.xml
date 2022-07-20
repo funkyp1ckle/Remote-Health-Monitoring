@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="background">#141414</color>
+    <color name="toolbarBackground">#0A0A0A</color>
     <color name="cardBackground">#CC1E1E1E</color>
     <color name="cardBackgroundOpaque">#1E1E1E</color>
     <color name="editTextBackground">#3C3C3C</color>

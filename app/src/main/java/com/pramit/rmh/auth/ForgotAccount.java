@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.textfield.TextInputLayout;
 import com.pramit.rmh.AWSConnection;
 import com.pramit.rmh.R;
-import com.pramit.rmh.ui.UIUtils;
+import com.pramit.rmh.UIUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -46,11 +46,11 @@ public class ForgotAccount extends DialogFragment {
         usernameEditText.setText(userId);
 
         Context context = getContext();
-        TextInputLayout newPasswordBox = UIUtils.GetTextBox(context, R.string.newPasswordInstructions);
+        TextInputLayout newPasswordBox = UIUtils.createTextBox(context, R.string.newPasswordInstructions);
         Objects.requireNonNull(newPasswordBox.getEditText()).setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         Objects.requireNonNull(newPasswordBox.getEditText()).setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD);
         newPasswordBox.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
-        TextInputLayout otpBox = UIUtils.GetTextBox(context, R.string.otpInstructions);
+        TextInputLayout otpBox = UIUtils.createTextBox(context, R.string.otpInstructions);
         Objects.requireNonNull(otpBox.getEditText()).setAutofillHints(HintConstants.AUTOFILL_HINT_SMS_OTP, HintConstants.AUTOFILL_HINT_EMAIL_OTP, HintConstants.AUTOFILL_HINT_2FA_APP_OTP);
 
         dialogBuilder.setPositiveButton(R.string.getOTP, null);

@@ -2,7 +2,6 @@ package com.pramit.rmh.auth;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.InputType;
@@ -17,7 +16,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputLayout;
 import com.pramit.rmh.AWSConnection;
 import com.pramit.rmh.R;
-import com.pramit.rmh.ui.UIUtils;
+import com.pramit.rmh.UIUtils;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -1005,10 +1004,7 @@ public class CreateAccount extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_acc);
-        if (Build.VERSION.SDK_INT >= 33)
-            this.aws = getIntent().getParcelableExtra("AWS", AWSConnection.class);
-        else
-            this.aws = getIntent().getParcelableExtra("AWS");
+        this.aws = AWSConnection.getInstance(getApplicationContext());
         initListeners();
     }
 
@@ -1055,7 +1051,6 @@ public class CreateAccount extends AppCompatActivity {
                 String userId = registrationData.get("preferred_username");
                 String password = registrationData.remove("password");
                 aws.signUp(this, userId, password, registrationData);
-                new OTPInput(userId, aws).show(getSupportFragmentManager(), OTPInput.FRAGMENT_TAG);
             }
         });
     }

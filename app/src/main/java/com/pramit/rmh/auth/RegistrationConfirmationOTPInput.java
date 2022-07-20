@@ -12,12 +12,12 @@ import com.pramit.rmh.AWSConnection;
 import com.pramit.rmh.R;
 import org.jetbrains.annotations.NotNull;
 
-public class OTPInput extends DialogFragment {
-    public static final String FRAGMENT_TAG = "OTP Input";
+public class RegistrationConfirmationOTPInput extends DialogFragment {
+    public static final String FRAGMENT_TAG = "Registration Confirmation OTP Input";
     private final String userId;
     private final AWSConnection aws;
 
-    public OTPInput(String userId, AWSConnection aws) {
+    public RegistrationConfirmationOTPInput(String userId, AWSConnection aws) {
         this.userId = userId;
         this.aws = aws;
     }
@@ -32,14 +32,10 @@ public class OTPInput extends DialogFragment {
         LinearLayout layout = dialogView.findViewById(R.id.confirm_acc_layout);
         dialogBuilder.setView(dialogView);
 
-        dialogBuilder.setPositiveButton(R.string.acc_verification_btn, null);
-        AlertDialog dialog = dialogBuilder.create();
-
-        dialog.setOnShowListener(dialogInterface -> dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener(click -> {
+        dialogBuilder.setPositiveButton(R.string.acc_verification_btn, (dialogInterface, i) -> {
             String code = ((EditText) dialogView.findViewById(R.id.otp)).getText().toString();
             aws.confirmUser(getContext(), userId, code);
-            dialog.dismiss(); //TODO: FIX SO DOESNT CLOSE IF INCORRECT
-        }));
-        return dialog;
+        });
+        return dialogBuilder.create();
     }
 }

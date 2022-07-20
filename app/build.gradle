@@ -55,9 +55,11 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.4.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
 
-    implementation 'com.amazonaws:aws-android-sdk-core:2.48.0'
-    implementation 'com.amazonaws:aws-android-sdk-auth-core:2.48.0'
-    implementation 'com.amazonaws:aws-android-sdk-auth-userpools:2.48.0'
-    implementation 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.48.0'
-    implementation 'com.amazonaws:aws-android-sdk-ddb:2.48.0'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.49.0'
+    implementation 'com.amazonaws:aws-android-sdk-auth-core:2.49.0'
+    implementation 'com.amazonaws:aws-android-sdk-auth-userpools:2.49.0'
+    implementation 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.49.0'
+    implementation 'com.amazonaws:aws-android-sdk-ddb:2.49.0'
+    implementation 'com.amazonaws:aws-android-sdk-ddb-document:2.49.0'
+    implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.49.0'
 }
