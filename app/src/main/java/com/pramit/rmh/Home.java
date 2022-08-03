@@ -12,8 +12,10 @@ import com.amazonaws.handlers.AsyncHandler;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
 import com.amazonaws.services.dynamodbv2.model.GetItemResult;
-import com.pramit.rmh.deviceModel.Device;
-import com.pramit.rmh.deviceModel.DeviceSelector;
+import com.pramit.rmh.device.Device;
+import com.pramit.rmh.device.DeviceSelector;
+import com.pramit.rmh.util.AWSUtils;
+import com.pramit.rmh.util.UIUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import java.util.concurrent.Future;
 
 public class Home extends AppCompatActivity {
     private String userId;
-    private AWSConnection aws;
+    private AWSUtils aws;
     private ArrayList<Device> devices;
 
     @Override
@@ -32,7 +34,7 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         this.userId = getIntent().getExtras().getString("user_id");
-        this.aws = AWSConnection.getInstance(this);
+        this.aws = AWSUtils.getInstance(this);
         this.devices = new ArrayList<>();
         getDevices();
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -50,10 +52,10 @@ public class Home extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int btnResId = item.getItemId();
         if (btnResId == R.id.viewAccountBtn) {
-            DialogFragment deviceSelector = new DeviceSelector();
-            deviceSelector.show(getSupportFragmentManager(), DeviceSelector.TAG);
             return true;
         } else if (btnResId == R.id.addDeviceBtn) {
+            DialogFragment deviceSelector = new DeviceSelector();
+            deviceSelector.show(getSupportFragmentManager(), DeviceSelector.TAG);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -71,7 +73,7 @@ public class Home extends AppCompatActivity {
     public void getDevices() {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("user_id", new AttributeValue(userId));
-        GetItemRequest request = new GetItemRequest(AWSConnection.DB_TABLE_NAME, key);
+        GetItemRequest request = new GetItemRequest(AWSUtils.DB_TABLE_NAME, key);
 
         List<String> attributesToGet = new ArrayList<>();
         attributesToGet.add("devices");
@@ -89,13 +91,10 @@ public class Home extends AppCompatActivity {
                 AttributeValue deviceList = resultValue.get("devices");
                 assert deviceList != null;
                 Map<String, AttributeValue> map = deviceList.getM();
-                List<Device> devices = new ArrayList<>();
                 for (Map.Entry<String, AttributeValue> mapEntry : map.entrySet())
                     devices.add(aws.dynamoMapToPOJO(Device.class, mapEntry.getValue().getM()));
-
-                for (Device curDevice : devices) {
+                for (Device curDevice : devices)
                     addDeviceToUI(curDevice);
-                }
             }
         });
     }

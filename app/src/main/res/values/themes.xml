@@ -26,4 +26,9 @@
 
         <item name="android:windowBackground">@drawable/dialog</item>
     </style>
+
+    <style name="DeviceSelectionFragment" parent="DialogFragment">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:layout_gravity">top|left</item>
+    </style>
 </resources>

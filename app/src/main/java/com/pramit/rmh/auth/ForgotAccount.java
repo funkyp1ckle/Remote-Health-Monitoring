@@ -14,9 +14,9 @@ import android.widget.Toast;
 import androidx.autofill.HintConstants;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.textfield.TextInputLayout;
-import com.pramit.rmh.AWSConnection;
 import com.pramit.rmh.R;
-import com.pramit.rmh.UIUtils;
+import com.pramit.rmh.util.AWSUtils;
+import com.pramit.rmh.util.UIUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -24,10 +24,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ForgotAccount extends DialogFragment {
     public static final String FRAGMENT_TAG = "forgot_account_dialog";
-    private final AWSConnection aws;
+    private final AWSUtils aws;
     private String userId;
 
-    public ForgotAccount(String userId, AWSConnection aws) {
+    public ForgotAccount(String userId, AWSUtils aws) {
         this.userId = userId;
         this.aws = aws;
     }
@@ -56,7 +56,6 @@ public class ForgotAccount extends DialogFragment {
         dialogBuilder.setPositiveButton(R.string.getOTP, null);
         AlertDialog dialog = dialogBuilder.create();
         dialog.setOnShowListener(dialogInterface -> {
-            //TEST PASS: FartsAreCool1.
             AtomicInteger clickCounter = new AtomicInteger(0);
             Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             button.setOnClickListener(view -> {

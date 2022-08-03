@@ -1,27 +1,20 @@
 package com.pramit.rmh.auth;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
-import com.pramit.rmh.AWSConnection;
-import com.pramit.rmh.Home;
 import com.pramit.rmh.R;
+import com.pramit.rmh.util.AWSUtils;
 
 public class Login extends AppCompatActivity {
-    private AWSConnection aws;
+    private AWSUtils aws;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.aws = AWSConnection.getInstance(getApplicationContext());
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
-        if (aws.updateCredentials()) {
-            Intent newActivity = new Intent(this, Home.class);
-            newActivity.putExtra("user_id", sharedPreferences.getString("user_id", ""));
-            startActivity(newActivity);
-        }
+        this.aws = AWSUtils.getInstance(getApplicationContext());
+        aws.continueSession(this);
         setContentView(R.layout.activity_login);
         initListeners();
     }

@@ -6,15 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
 import com.amazonaws.services.cognitoidentityprovider.model.SignUpResult;
-import com.pramit.rmh.AWSConnection;
+import com.pramit.rmh.util.AWSUtils;
 
 public class RegistrationHandler implements SignUpHandler {
     private final Context context;
-    private final AWSConnection aws;
+    private final AWSUtils aws;
 
     public RegistrationHandler(Context context) {
         this.context = context;
-        this.aws = AWSConnection.getInstance(context.getApplicationContext());
+        this.aws = AWSUtils.getInstance(context.getApplicationContext());
     }
 
     @Override

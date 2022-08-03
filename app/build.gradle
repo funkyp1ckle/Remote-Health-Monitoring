@@ -35,6 +35,7 @@ android {
 
     ndkVersion '23.2.8568313'
     ndkPath 'C:\\AndroidNDK'
+    namespace 'com.pramit.rmh'
 }
 
 dependencies {

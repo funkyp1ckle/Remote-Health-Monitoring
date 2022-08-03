@@ -2,7 +2,7 @@ package com.pramit.rmh;
 
 import org.junit.Test;
 
-public class AWSConnectionTest {
+public class AWSUtilsTest {
     @Test
     public void registerNewUser() {
     }

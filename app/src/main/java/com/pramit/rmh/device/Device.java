@@ -1,4 +1,4 @@
-package com.pramit.rmh.deviceModel;
+package com.pramit.rmh.device;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 

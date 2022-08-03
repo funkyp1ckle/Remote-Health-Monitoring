@@ -1,4 +1,4 @@
-package com.pramit.rmh;
+package com.pramit.rmh.util;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -19,7 +19,8 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.pramit.rmh.deviceModel.Device;
+import com.pramit.rmh.R;
+import com.pramit.rmh.device.Device;
 
 import static com.google.android.material.datepicker.MaterialDatePicker.todayInUtcMilliseconds;
 

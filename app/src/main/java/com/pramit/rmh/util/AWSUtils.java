@@ -1,4 +1,4 @@
-package com.pramit.rmh;
+package com.pramit.rmh.util;
 
 import android.content.Context;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -16,19 +16,19 @@ import com.pramit.rmh.auth.*;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-public class AWSConnection {
+public class AWSUtils {
     public static final Regions REGION = Regions.US_EAST_1;
     public static final String USER_POOL_ID = "us-east-1_XD7LWYRpW";
-    public static final String IDENTITY_POOL_ID = "us-east-1:6165c7bc-98be-44e1-b14d-6ce1b6605057";
+    public static final String IDENTITY_POOL_ID = "us-east-1:ad9934c1-fe03-450c-a6b4-84d019600c36";
     public static final String CLIENT_ID = "7sb607motb1es94lv4kovf12v6";
     public static final String DB_TABLE_NAME = "remoteHealthMonitoring";
-    private static AWSConnection aws;
+    private static AWSUtils aws;
     private final CognitoCachingCredentialsProvider credentialsProvider;
     private final CognitoUserPool userPool;
     private final AmazonDynamoDBAsync dynamoDB;
     private final DynamoDBMapper dynamoDBMapper;
 
-    private AWSConnection(Context context) {
+    private AWSUtils(Context context) {
         credentialsProvider = new CognitoCachingCredentialsProvider(
                 context,
                 IDENTITY_POOL_ID,
@@ -38,9 +38,9 @@ public class AWSConnection {
         dynamoDBMapper = DynamoDBMapper.builder().dynamoDBClient(dynamoDB).build();
     }
 
-    public static synchronized AWSConnection getInstance(Context context) {
+    public static synchronized AWSUtils getInstance(Context context) {
         if (aws == null)
-            aws = new AWSConnection(context);
+            aws = new AWSUtils(context);
         return aws;
     }
 
@@ -48,19 +48,9 @@ public class AWSConnection {
         return dynamoDBMapper.marshallIntoObject(cls, attr);
     }
 
-    //TODO: IMPROVE
-    public boolean updateCredentials() {
-        if (credentialsProvider.getCachedIdentityId() != null) {
-            Thread updateCredsTask = new Thread(credentialsProvider::getCredentials);
-            updateCredsTask.start();
-            try {
-                updateCredsTask.join();
-                return true;
-            } catch (InterruptedException interrupt) {
-                interrupt.printStackTrace();
-            }
-        }
-        return false;
+    public void continueSession(Context context) {
+        if (credentialsProvider.getCachedIdentityId() != null)
+            userLogin(context, userPool.getCurrentUser().getUserId(), null);
     }
 
     public Future<GetItemResult> getItem(GetItemRequest getItemRequest, AsyncHandler<GetItemRequest, GetItemResult> asyncHandler) {
@@ -80,8 +70,8 @@ public class AWSConnection {
     }
 
     public void userLogin(Context context, String userId, String userPassword) {
-        if (userId != null && userPassword != null)
-            userPool.getUser(userId).getSessionInBackground(new LoginHandler(context, userPassword, userPool.getUserPoolId(), credentialsProvider));
+        if (userId != null)
+            userPool.getUser(userId).getSessionInBackground(new LoginHandler(context, userPassword, credentialsProvider));
     }
 
     public void signUp(Context context, String userId, String password, Map<String, String> metadata) {
@@ -114,9 +104,5 @@ public class AWSConnection {
     public void confirmForgotPassword(Context context, String userId, String newPassword, String otp) {
         if (userId != null)
             userPool.getUser(userId).confirmPasswordInBackground(otp, newPassword, new PasswordResetConfirmationHandler(context, newPassword, otp));
-    }
-
-    public String getCognitoIdentityId() {
-        return credentialsProvider.getCachedIdentityId();
     }
 }

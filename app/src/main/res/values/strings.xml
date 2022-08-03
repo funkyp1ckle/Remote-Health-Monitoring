@@ -26,4 +26,13 @@
     <string name="home_scroll_description">Root Scroll View</string>
     <string name="add_device_btn">Add Device</string>
     <string name="view_acc_btn">View Account</string>
+    <string name="add_device_instructions_lbl">
+        <h1>
+            <big>
+                <big>
+                    <b>Add A Device</b>
+                </big>
+            </big>
+        </h1>
+    </string>
 </resources>

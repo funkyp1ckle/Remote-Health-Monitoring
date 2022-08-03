@@ -14,9 +14,9 @@ import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputLayout;
-import com.pramit.rmh.AWSConnection;
 import com.pramit.rmh.R;
-import com.pramit.rmh.UIUtils;
+import com.pramit.rmh.util.AWSUtils;
+import com.pramit.rmh.util.UIUtils;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -965,7 +965,7 @@ public class CreateAccount extends AppCompatActivity {
                 .withResolverStyle(ResolverStyle.SMART);
     }
 
-    private AWSConnection aws;
+    private AWSUtils aws;
 
     public static int getCountryAreaCode(String region) {
         for (Map.Entry<ArrayList<String>, Integer> countryCode : countryToCodes.entrySet()) {
@@ -1004,7 +1004,7 @@ public class CreateAccount extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_acc);
-        this.aws = AWSConnection.getInstance(getApplicationContext());
+        this.aws = AWSUtils.getInstance(getApplicationContext());
         initListeners();
     }
 

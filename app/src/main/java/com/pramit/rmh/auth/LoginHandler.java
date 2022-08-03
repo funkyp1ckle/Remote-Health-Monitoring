@@ -14,23 +14,20 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Mult
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
-import com.pramit.rmh.AWSConnection;
 import com.pramit.rmh.Home;
+import com.pramit.rmh.util.AWSUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoginHandler implements AuthenticationHandler {
-
     private final Context context;
     private final String userPassword;
-    private final String userPoolId;
     private final CognitoCachingCredentialsProvider credentialsProvider;
 
-    public LoginHandler(Context context, String userPassword, String userPoolId, CognitoCachingCredentialsProvider credentialsProvider) {
+    public LoginHandler(Context context, String userPassword, CognitoCachingCredentialsProvider credentialsProvider) {
         this.context = context;
         this.userPassword = userPassword;
-        this.userPoolId = userPoolId;
         this.credentialsProvider = credentialsProvider;
     }
 
@@ -42,9 +39,9 @@ public class LoginHandler implements AuthenticationHandler {
         sharedPreferencesEditor.putString("user_id", username);
         sharedPreferencesEditor.apply();
         Map<String, String> logins = new HashMap<>();
-        logins.put("cognito-idp." + AWSConnection.REGION.getName() + ".amazonaws.com/" + userPoolId, userSession.getIdToken().getJWTToken());
+        logins.put("cognito-idp." + AWSUtils.REGION.getName() + ".amazonaws.com/" + AWSUtils.USER_POOL_ID, userSession.getIdToken().getJWTToken());
         credentialsProvider.setLogins(logins);
-        createUserProfile(userSession.getUsername());
+        createUserProfile(username);
         Intent newActivity = new Intent(context, Home.class);
         newActivity.putExtra("user_id", username);
         newActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -53,9 +50,11 @@ public class LoginHandler implements AuthenticationHandler {
 
     @Override
     public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
-        AuthenticationDetails authenticationDetails = new AuthenticationDetails(userId, userPassword, null);
-        authenticationContinuation.setAuthenticationDetails(authenticationDetails);
-        authenticationContinuation.continueTask();
+        if (userPassword != null) {
+            AuthenticationDetails authenticationDetails = new AuthenticationDetails(userId, userPassword, null);
+            authenticationContinuation.setAuthenticationDetails(authenticationDetails);
+            authenticationContinuation.continueTask();
+        }
     }
 
     @Override
@@ -73,10 +72,10 @@ public class LoginHandler implements AuthenticationHandler {
     }
 
     public void createUserProfile(String userId) {
-        AWSConnection aws = AWSConnection.getInstance(context.getApplicationContext());
+        AWSUtils aws = AWSUtils.getInstance(context.getApplicationContext());
         Map<String, AttributeValue> userProfile = new HashMap<>();
         userProfile.put("user_id", new AttributeValue(userId));
-        PutItemRequest request = new PutItemRequest(AWSConnection.DB_TABLE_NAME, userProfile);
+        PutItemRequest request = new PutItemRequest(AWSUtils.DB_TABLE_NAME, userProfile);
         request.setConditionExpression("attribute_not_exists(user_id)");
         aws.putItem(request, null);
     }
