@@ -1,5 +1,7 @@
 package com.pramit.rmh.util;
 
+import android.bluetooth.BluetoothClass;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -11,9 +13,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -107,7 +111,7 @@ public class UIUtils {
         deviceName.setGravity(Gravity.START);
 
         Button expandToggleBtn = new Button(context);
-        expandToggleBtn.setCompoundDrawables(null, null, resources.getDrawable(R.drawable.ic_baseline_arrow_drop_down_24, context.getTheme()), null);
+        expandToggleBtn.setCompoundDrawables(null, null, ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24, context.getTheme()), null);
         expandToggleBtn.setGravity(Gravity.END);
 
         card.addView(deviceName);
@@ -120,15 +124,40 @@ public class UIUtils {
             public void onClick(View view) {
                 //TODO: UPDATE CARD
                 if (isOpened) {
-                    expandToggleBtn.setCompoundDrawables(null, null, resources.getDrawable(R.drawable.ic_baseline_arrow_drop_down_24, context.getTheme()), null);
+                    expandToggleBtn.setCompoundDrawables(null, null, ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24, context.getTheme()), null);
                 } else {
-                    expandToggleBtn.setCompoundDrawables(null, null, resources.getDrawable(R.drawable.ic_baseline_arrow_drop_up_24, context.getTheme()), null);
+                    expandToggleBtn.setCompoundDrawables(null, null, ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_up_24, context.getTheme()), null);
                 }
                 isOpened = !isOpened;
             }
         });
 
         return card;
+    }
+
+    @SuppressWarnings({"MissingPermission"})
+    public static View createDeviceListEntry(Context context, BluetoothDevice bluetoothDevice) {
+        String deviceName = bluetoothDevice.getName();
+        int generalDeviceType = bluetoothDevice.getBluetoothClass().getDeviceClass();
+
+        ImageView deviceTypeIcon = new ImageView(context);
+        deviceTypeIcon.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        if (generalDeviceType == BluetoothClass.Device.WEARABLE_WRIST_WATCH) {
+            deviceTypeIcon.setImageResource(R.drawable.smartwatch_icon);
+        }
+
+        TextView deviceNameTextView = new TextView(context);
+        deviceNameTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        deviceNameTextView.setText(deviceName);
+
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        layout.addView(deviceTypeIcon);
+        layout.addView(deviceNameTextView);
+
+        return layout;
     }
 
     public static int pxToDp(Context context, float px) {

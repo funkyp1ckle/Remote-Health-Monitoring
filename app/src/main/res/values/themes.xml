@@ -29,6 +29,6 @@
 
     <style name="DeviceSelectionFragment" parent="DialogFragment">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:layout_gravity">top|left</item>
+        <item name="android:layout_gravity">top|center_horizontal</item>
     </style>
 </resources>

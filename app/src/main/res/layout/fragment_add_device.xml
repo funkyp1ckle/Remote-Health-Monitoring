@@ -3,7 +3,9 @@
               android:id="@+id/confirm_add_device_layout"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content"
+        >
+
     <TextView
             android:id="@+id/add_device_instructions"
             android:text="@string/add_device_instructions_lbl"
@@ -13,6 +15,7 @@
             android:paddingEnd="0dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"/>
+
     <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
