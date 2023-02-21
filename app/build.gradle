@@ -1,0 +1,72 @@
+plugins {
+    id 'com.android.application'
+}
+
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
+android {
+    defaultConfig {
+        applicationId "com.pramit.rhm"
+        minSdkVersion 28
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "Regions", "REGION", localProperties['REGION']
+        buildConfigField "String", "USER_POOL_ID", localProperties['USER_POOL_ID']
+        buildConfigField "String", "IDENTITY_POOL_ID", localProperties['IDENTITY_POOL_ID']
+        buildConfigField "String", "CLIENT_ID", localProperties['CLIENT_ID']
+        buildConfigField "String", "DB_TABLE_NAME", localProperties['DB_TABLE_NAME']
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/c/Android.mk'
+        }
+    }
+
+    ndkVersion '23.2.8568313'
+    ndkPath 'C:\\AndroidNDK'
+    namespace 'com.pramit.rhm'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compileOnly 'com.google.android.things:androidthings:1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
+    implementation 'androidx.fragment:fragment:1.5.5'
+    implementation 'androidx.autofill:autofill:1.2.0-beta01'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:core:1.5.0'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+
+    implementation 'com.amazonaws:aws-android-sdk-core:2.50.1'
+    implementation 'com.amazonaws:aws-android-sdk-auth-core:2.50.1'
+    implementation 'com.amazonaws:aws-android-sdk-auth-userpools:2.50.1'
+    implementation 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.50.1'
+    implementation 'com.amazonaws:aws-android-sdk-ddb:2.50.1'
+    implementation 'com.amazonaws:aws-android-sdk-ddb-document:2.50.1'
+    implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.50.1'
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="appIconBackground">#112240</color>
+    <color name="statusBarColor">#191919</color>
+    <color name="background">#DCDCDC</color>
+    <color name="toolbarBackground">#969696</color>
+    <color name="cardBackground">#CCC8C8C8</color>
+    <color name="cardBackgroundOpaque">#C8C8C8</color>
+    <color name="editTextBackground">#DCDCDC</color>
+    <color name="normalText">#1E1E1E</color>
+    <color name="linkText">#8AB4F8</color>
+    <color name="loginBtnBackground">#5010A1</color>
+    <color name="googleBtnBackground">#EEEEEE</color>
+    <color name="facebookBtnBackground">#1877F2</color>
+    <color name="appleBtnbackground">#000000</color>
+</resources>
