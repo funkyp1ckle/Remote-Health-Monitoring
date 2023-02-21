@@ -6,6 +6,8 @@ def localProperties = new Properties()
 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
+    compileSdkVersion 33
+    buildToolsVersion '33.0.0'
     defaultConfig {
         applicationId "com.pramit.rhm"
         minSdkVersion 28
